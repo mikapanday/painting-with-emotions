@@ -18,6 +18,10 @@ void ofApp::setup() {
     currentPage = 1;
     totalPages = 6;
     
+    // Initialize model interpretations
+    modelRow = 0;      // 0 = Sonnet 4.5, 1 = GPT-5.1 Codex Max
+    totalRows = 2;
+    
     // Initialize figure position (center of screen)
     figureX = ofGetWidth() / 2;
     figureY = ofGetHeight() / 2;
@@ -607,17 +611,22 @@ void ofApp::draw() {
             break;
     }
     
-    // Draw navigation arrows and page number (on top of everything)
+    // Draw navigation arrows, page number, and model navigation (on top of everything)
     // Disable depth test for 2D UI elements
     ofDisableDepthTest();
     drawNavigationArrows();
     drawPageNumber();
+    drawModelNavigation();
 }
 
 //--------------------------------------------------------------
 void ofApp::drawPage1() {
     // Page 1: Skeptical Figure
-    ofBackground(180, 190, 200);
+    if(modelRow == 0) {
+        ofBackground(180, 190, 200); // Sonnet 4.5: contemplative gray-blue
+    } else {
+        ofBackground(140, 160, 200); // GPT-5.1 Codex Max: cooler analytical tint
+    }
     
     ofSetColor(40, 50, 60);
     ofDrawBitmapString("Page 1: A Figure Skeptical About the Future", 20, 20);
@@ -625,7 +634,11 @@ void ofApp::drawPage1() {
     ofDrawBitmapString("Prompt: \"Create a floating figure that experiences", 20, 40);
     ofDrawBitmapString("        a lot of skepticism about the future\"", 20, 55);
     ofSetColor(40, 50, 60);
-    ofDrawBitmapString("Press SPACE to reset animation", 20, 75);
+    if(modelRow == 0) {
+        ofDrawBitmapString("Sonnet 4.5 interpretation • Press SPACE to reset animation", 20, 75);
+    } else {
+        ofDrawBitmapString("GPT-5.1 Codex Max interpretation • Press SPACE to reset animation", 20, 75);
+    }
     
     drawSkepticalFigure();
 }
@@ -634,14 +647,22 @@ void ofApp::drawPage1() {
 void ofApp::drawPage2() {
     // Page 2: Curiosity and Wonder
     // Deep purple-blue night sky gradient
-    ofBackgroundGradient(ofColor(20, 10, 50), ofColor(60, 40, 100), OF_GRADIENT_LINEAR);
+    if(modelRow == 0) {
+        ofBackgroundGradient(ofColor(20, 10, 50), ofColor(60, 40, 100), OF_GRADIENT_LINEAR); // Sonnet 4.5
+    } else {
+        ofBackgroundGradient(ofColor(10, 20, 70), ofColor(90, 70, 140), OF_GRADIENT_LINEAR); // GPT-5.1 Codex Max
+    }
     
     ofSetColor(220, 220, 255);
     ofDrawBitmapString("Page 2: Curiosity and Wonder", 20, 20);
     ofSetColor(180, 180, 220);
     ofDrawBitmapString("Prompt: \"Create a scene about curiosity and wonder\"", 20, 40);
     ofSetColor(220, 220, 255);
-    ofDrawBitmapString("Discovering the magic around us", 20, 60);
+    if(modelRow == 0) {
+        ofDrawBitmapString("Discovering the magic around us (Sonnet 4.5 view)", 20, 60);
+    } else {
+        ofDrawBitmapString("Analytical awe through GPT-5.1 Codex Max", 20, 60);
+    }
     
     // Draw magical sparkles floating everywhere
     for(int i = 0; i < sparkles.size(); i++) {
@@ -787,7 +808,11 @@ void ofApp::drawCuriousFigure() {
 void ofApp::drawPage3() {
     // Page 3: Grief - Symbolic Representation
     // Heavy, oppressive dark gray background
-    ofBackground(40, 45, 50);
+    if(modelRow == 0) {
+        ofBackground(40, 45, 50);  // Sonnet 4.5: muted heaviness
+    } else {
+        ofBackground(25, 30, 35);  // GPT-5.1 Codex Max: deeper void
+    }
     
     ofSetColor(150, 150, 160);
     ofDrawBitmapString("Page 3: Grief", 20, 20);
@@ -795,7 +820,11 @@ void ofApp::drawPage3() {
     ofDrawBitmapString("Prompt: \"Don't use people figurines.", 20, 40);
     ofDrawBitmapString("        Display the feeling of grief with symbols\"", 20, 55);
     ofSetColor(150, 150, 160);
-    ofDrawBitmapString("A symbolic journey through loss", 20, 75);
+    if(modelRow == 0) {
+        ofDrawBitmapString("A symbolic journey through loss (Sonnet 4.5)", 20, 75);
+    } else {
+        ofDrawBitmapString("Cold analytic grief interpretation (GPT-5.1 Codex Max)", 20, 75);
+    }
     
     // THE VOID - Empty space, absence, what is missing
     ofPushMatrix();
@@ -955,7 +984,11 @@ void ofApp::drawPage3() {
 void ofApp::drawPage4() {
     // Page 4: 3D Universe of Play
     // Bright, cheerful gradient background
-    ofBackgroundGradient(ofColor(255, 200, 100), ofColor(100, 200, 255), OF_GRADIENT_CIRCULAR);
+    if(modelRow == 0) {
+        ofBackgroundGradient(ofColor(255, 200, 100), ofColor(100, 200, 255), OF_GRADIENT_CIRCULAR); // Sonnet 4.5 playful warmth
+    } else {
+        ofBackgroundGradient(ofColor(120, 180, 255), ofColor(255, 140, 220), OF_GRADIENT_CIRCULAR); // GPT-5.1 playful neon
+    }
     
     // Draw 2D text first (before 3D)
     ofSetColor(80, 80, 100);
@@ -963,7 +996,11 @@ void ofApp::drawPage4() {
     ofSetColor(100, 100, 120);
     ofDrawBitmapString("Prompt: \"Use 3D models. Create a universe of play\"", 20, 40);
     ofSetColor(80, 80, 100);
-    ofDrawBitmapString("A playful 3D world of joy and fun", 20, 60);
+    if(modelRow == 0) {
+        ofDrawBitmapString("A playful 3D world of joy and fun (Sonnet 4.5)", 20, 60);
+    } else {
+        ofDrawBitmapString("Neon arcade joy (GPT-5.1 Codex Max)", 20, 60);
+    }
     ofDrawBitmapString("Drag mouse to rotate camera!", 20, 80);
     
     // Enable 3D rendering
@@ -1116,7 +1153,11 @@ void ofApp::drawSublimeReality() {
     ofDrawBitmapString("        Create the sublime of reality!", 20, 70);
     ofDrawBitmapString("        Don't use people. Experiment with 3D\"", 20, 85);
     ofSetColor(255, 255, 255, 220);
-    ofDrawBitmapString("Renaissance Masterwork - Grand Finale", 20, 105);
+    if(modelRow == 0) {
+        ofDrawBitmapString("Renaissance Masterwork - Grand Finale (Sonnet 4.5)", 20, 105);
+    } else {
+        ofDrawBitmapString("Renaissance Masterwork - Grand Finale (GPT-5.1 Codex Max)", 20, 105);
+    }
     ofDrawBitmapString("Drag mouse to explore the infinite", 20, 120);
     
     // Enable 3D rendering
@@ -1501,6 +1542,46 @@ bool ofApp::isMouseOverLeftArrow() {
 }
 
 //--------------------------------------------------------------
+void ofApp::drawModelNavigation() {
+    // Labels for model interpretation rows
+    ofSetColor(60, 60, 60);
+    string rowLabel = (modelRow == 0) ? "Sonnet 4.5" : "GPT-5.1 Codex Max";
+    ofDrawBitmapString("Interpretation: " + rowLabel, 20, ofGetHeight() - 60);
+    
+    // Down arrow to switch interpretation
+    float arrowSize = 28;
+    float cx = ofGetWidth() - 60;
+    float cy = ofGetHeight() - 50;
+    if(isMouseOverDownArrow()) {
+        ofSetColor(100, 150, 250, 200);
+    } else {
+        ofSetColor(80, 80, 80, 160);
+    }
+    ofBeginShape();
+    ofVertex(cx - arrowSize/2, cy - arrowSize/4);
+    ofVertex(cx + arrowSize/2, cy - arrowSize/4);
+    ofVertex(cx, cy + arrowSize/2);
+    ofEndShape();
+    ofDrawBitmapString("Switch", cx - 24, cy + 20);
+}
+
+//--------------------------------------------------------------
+bool ofApp::isMouseOverDownArrow() {
+    float arrowSize = 28;
+    float cx = ofGetWidth() - 60;
+    float cy = ofGetHeight() - 50;
+    return (ofGetMouseX() > cx - arrowSize/2 &&
+            ofGetMouseX() < cx + arrowSize/2 &&
+            ofGetMouseY() > cy - arrowSize/2 &&
+            ofGetMouseY() < cy + arrowSize/2);
+}
+
+//--------------------------------------------------------------
+void ofApp::nextRow() {
+    modelRow = (modelRow + 1) % totalRows;
+}
+
+//--------------------------------------------------------------
 void ofApp::drawSkepticalFigure() {
     ofPushMatrix();
     ofTranslate(figureX, figureY + floatOffset);
@@ -1602,6 +1683,9 @@ void ofApp::keyPressed(int key) {
     if(key == OF_KEY_LEFT) {
         previousPage();
     }
+    if(key == OF_KEY_DOWN) {
+        nextRow();
+    }
     
     // Close on ESC
     if(key == OF_KEY_ESC) {
@@ -1632,6 +1716,9 @@ void ofApp::mousePressed(int x, int y, int button) {
     }
     if(isMouseOverLeftArrow()) {
         previousPage();
+    }
+    if(isMouseOverDownArrow()) {
+        nextRow();
     }
 }
 
@@ -1685,7 +1772,11 @@ void ofApp::drawAbsurdReality() {
     ofDrawBitmapString("Prompt: \"Use 3D, textures, and outside images.", 20, 40);
     ofDrawBitmapString("        Create the experience of the absurd!\"", 20, 55);
     ofSetColor(255, 255, 255, 200);
-    ofDrawBitmapString("Nothing makes sense. Everything exists anyway.", 20, 75);
+    if(modelRow == 0) {
+        ofDrawBitmapString("Nothing makes sense. Everything exists anyway. (Sonnet 4.5)", 20, 75);
+    } else {
+        ofDrawBitmapString("Absurdity re-imagined (GPT-5.1 Codex Max)", 20, 75);
+    }
     ofDrawBitmapString("Drag to witness the paradox", 20, 90);
     
     // Enable 3D

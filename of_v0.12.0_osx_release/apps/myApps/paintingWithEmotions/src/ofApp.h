@@ -140,6 +140,13 @@ public:
     float sublimeTime;
     float fibonacci[20];
     
+    // Model interpretations (rows)
+    int modelRow;            // 0 = Sonnet 4.5, 1 = GPT-5.1 Codex Max
+    int totalRows;           // currently 2
+    void nextRow();
+    bool isMouseOverDownArrow();
+    void drawModelNavigation();
+    
     // Page 6: The Absurd - Surreal nightmare/dream
     struct AbsurdObject {
         ofVec3f position;
