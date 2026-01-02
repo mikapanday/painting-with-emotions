@@ -1,0 +1,30 @@
+# OpenFrameworks compiled files
+of_v0.12.0_osx_release/apps/myApps/paintingWithEmotions/bin/
+of_v0.12.0_osx_release/apps/myApps/paintingWithEmotions/obj/
+*.o
+*.a
+*.app
+
+# OpenFrameworks libraries (users should download OF themselves)
+of_v0.12.0_osx_release/libs/
+of_v0.12.0_osx_release/addons/
+of_v0.12.0_osx_release/examples/
+of_v0.12.0_osx_release/scripts/
+of_v0.12.0_osx_release/docs/
+of_v0.12.0_osx_release/projectGenerator/
+
+# Keep only the source code
+!of_v0.12.0_osx_release/apps/
+!of_v0.12.0_osx_release/apps/myApps/
+!of_v0.12.0_osx_release/apps/myApps/paintingWithEmotions/
+
+# macOS
+.DS_Store
+*.swp
+*.swo
+*~
+
+# Build files
+*.d
+*.dSYM
+
